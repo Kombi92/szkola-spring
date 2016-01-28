@@ -16,6 +16,7 @@ public interface SzkolaManager {
 	List<Uczen> getAllUczen();
 	void disposeUczenFromLekcja(Lekcja lekcja, Uczen uczen);
 	Uczen findUczenById(Long id);
+	void deleteUczen(Uczen uczen);
 
 	List<Uczen> getOwnedLekcja(Lekcja lekcja);
 	void giveUczenLekcja(Long lekcjaID, Long uczenID);

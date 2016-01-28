@@ -45,6 +45,14 @@ public class SzkolaMangerHibernateImpl implements SzkolaManager {
 	}
 
 	@Override
+	public void deleteUczen(Uczen uczen) {
+		uczen = (Uczen) sessionFactory.getCurrentSession().get(Uczen.class,
+				uczen.getIdUczen());
+
+		sessionFactory.getCurrentSession().delete(uczen);
+	}
+
+	@Override
 	public List<Uczen> getOwnedLekcja (Lekcja lekcja) {
 		lekcja = (Lekcja) sessionFactory.getCurrentSession().get(Lekcja.class,
 				lekcja.getIdLekcja());

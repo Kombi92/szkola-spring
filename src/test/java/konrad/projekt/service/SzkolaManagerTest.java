@@ -41,6 +41,7 @@ public class SzkolaManagerTest {
 	private final String RODZAJ_1 = "narty";
 	private final String GODZ_1 = "4";
 	private final Long ID_1 = Long.valueOf(5);
+	private final Long ID_2 = Long.valueOf(10);
 
 	private final String RODZAJ_2 = "snowboard";
 	private final String GODZ_2 = "3";
@@ -50,28 +51,15 @@ public class SzkolaManagerTest {
 	@Test
 	public void addLekcjaCheck() {
 
-		List<Lekcja> retrievedLekcjas = szkolaManager.getAllLekcja();
-
-		for (Lekcja lekcja : retrievedLekcjas) {
-			if (lekcja.getRodzaj().equals(RODZAJ_1)) {
-				szkolaManager.deleteLekcja(lekcja);
-			}
-		}
-
 		Lekcja lekcja = new Lekcja();
 		lekcja.setRodzaj(RODZAJ_1);
 		lekcja.setIdLekcja( ID_1);
 
 		szkolaManager.addLekcja(lekcja);
+		Lekcja lekcja2 = szkolaManager.findLekcjaById(lekcja.getIdLekcja());
 
-		retrievedLekcjas = szkolaManager.getAllLekcja();
+		assertEquals(lekcja,lekcja2);
 
-	//Doesnt work :<	Lekcja retrievedLekcja = szkolaManager.findLekcjaById( ID_1);
-
-        Lekcja retrievedLekcja;
-        retrievedLekcja = retrievedLekcjas.get(retrievedLekcjas.size() -1);
-
-		assertEquals(RODZAJ_1, retrievedLekcja.getRodzaj());
 	}
 
 	@Test
@@ -131,20 +119,38 @@ public class SzkolaManagerTest {
 
 	}
 
+	@Test
+	public void uczenDropCheck() {  // test usuniecia lekcji z przypisanym uczniem
+
+		Uczen uczen1 = new Uczen();
+
+		uczen1.setImie(IMIE_1); uczen1.setNazw(NAZWISKO_1); uczen1.setDosw(DOSW_1);uczen1.setZapisany(true);
+
+		szkolaManager.addUczen(uczen1);
+		szkolaManager.deleteUczen(uczen1);
+
+		assertNull(szkolaManager.findUczenById(ID_1));
+
+	}
+
 	 @Test
 	public void editUczenCheck() {
 
 		 Uczen uczen1 = new Uczen();
+		 Uczen uczen2 = new Uczen();
 
 		 uczen1.setImie(IMIE_1); uczen1.setNazw(NAZWISKO_1); uczen1.setDosw(DOSW_1); uczen1.setLekcja(ID_1);uczen1.setZapisany(true);
+		 uczen2.setImie(IMIE_2); uczen2.setNazw(NAZWISKO_2); uczen2.setDosw(DOSW_2); uczen2.setLekcja(ID_2);uczen2.setZapisany(true);
 
 		 szkolaManager.addUczen(uczen1);
+		 szkolaManager.addUczen(uczen2);
 
 		 assertEquals(uczen1.getImie(),IMIE_1);
 
-		 uczen1.setImie(IMIE_2);
+		 uczen1.setImie("Konrad");
 
-		 assertEquals(uczen1.getImie(),IMIE_2);
+		 assertEquals(uczen1.getImie(),"Konrad");
+		 assertEquals(uczen2.getImie(),IMIE_2);
 	 }
 
 	@Test
@@ -181,7 +187,11 @@ public class SzkolaManagerTest {
 
 		uczniowie = szkolaManager.getAllUczen();
 
-		assertEquals(2,uczniowie.size());
+		//assertEquals(2,uczniowie.size());
+
+		for(Uczen uczen : uczniowie){
+			assertEquals(false,uczen.getZapisany());
+		}
 	}
 
 	@Test
@@ -207,6 +217,4 @@ public class SzkolaManagerTest {
 
 		assertEquals(2,uczniowie.size());
 	}
-
-
 }
