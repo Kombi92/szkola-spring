@@ -118,16 +118,14 @@ public class SzkolaManagerTest {
 
 		lekcja1.setGodz(GODZ_1); lekcja1.setIdLekcja(ID_1);lekcja1.setRodzaj(RODZAJ_1);
 
-		uczen1.setImie(IMIE_1); uczen1.setNazw(NAZWISKO_1); uczen1.setDosw(DOSW_1); uczen1.setLekcja(ID_1);uczen1.setZapisany(true);
-
+		uczen1.setImie(IMIE_1); uczen1.setNazw(NAZWISKO_1); uczen1.setDosw(DOSW_1);uczen1.setZapisany(true);
 
 		szkolaManager.addUczen(uczen1);
-
 		szkolaManager.addLekcja(lekcja1);
-
+		szkolaManager.giveUczenLekcja(lekcja1.getIdLekcja(),uczen1.getIdUczen());
 		szkolaManager.deleteLekcja(lekcja1);
 
-//		assertFalse(uczen1.getZapisany());
+		assertFalse(uczen1.getZapisany());
 
 		assertNull(szkolaManager.findLekcjaById(ID_1));
 
