@@ -37,9 +37,9 @@ public class SzkolaMangerHibernateImpl implements SzkolaManager {
 				lekcja.getIdLekcja());
 		
 		// lazy loading here
-		for (Uczen uczen : lekcja.getUczniowie()) {
-			uczen.setLekcja(null);
-			sessionFactory.getCurrentSession().update(uczen);
+		for (Uczen aUczen : lekcja.getUczniowie()) {
+			aUczen.setZapisany(false);
+			sessionFactory.getCurrentSession().update(aUczen);
 		}
 		sessionFactory.getCurrentSession().delete(lekcja);
 	}
@@ -62,7 +62,8 @@ public class SzkolaMangerHibernateImpl implements SzkolaManager {
 
 	@Override
 	public Lekcja findLekcjaById(Long id) {
-		return (Lekcja) sessionFactory.getCurrentSession().getNamedQuery("lekcja.byId").setLong("id", id).uniqueResult();
+		//return (Lekcja) sessionFactory.getCurrentSession().getNamedQuery("lekcja.byId").setInteger("id", id).uniqueResult()
+		return (Lekcja) sessionFactory.getCurrentSession().get(Lekcja.class, id);
 	}
 
 

@@ -1,10 +1,7 @@
 package konrad.projekt.service;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
+import java.sql.Connection;
 import java.util.List;
 
 
@@ -20,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kolobry.projekt.domain.Uczen;
 import kolobry.projekt.domain.Lekcja;
 
-
+import static org.junit.Assert.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,17 +39,18 @@ public class SzkolaManagerTest {
 
 	private final String RODZAJ_1 = "narty";
 	private final String GODZ_1 = "4";
-	private final int ID_1 = 5;
+	private final Long ID_1 = Long.valueOf(5);
 
 	private final String RODZAJ_2 = "snowboard";
 	private final String GODZ_2 = "3";
 
-/*	@Test
+
+
+	@Test
 	public void addLekcjaCheck() {
 
 		List<Lekcja> retrievedLekcjas = szkolaManager.getAllLekcja();
 
-		// If there is a client with PIN_1 delete it
 		for (Lekcja lekcja : retrievedLekcjas) {
 			if (lekcja.getRodzaj().equals(RODZAJ_1)) {
 				szkolaManager.deleteLekcja(lekcja);
@@ -61,20 +59,20 @@ public class SzkolaManagerTest {
 
 		Lekcja lekcja = new Lekcja();
 		lekcja.setRodzaj(RODZAJ_1);
-		lekcja.setIdLekcja((long) ID_1);
-		// ... other properties here
+		lekcja.setIdLekcja( ID_1);
 
-
-		// ID is Unique
 		szkolaManager.addLekcja(lekcja);
 
-		Lekcja retrievedLekcja = szkolaManager.findLekcjaById((long) ID_1);
+		retrievedLekcjas = szkolaManager.getAllLekcja();
+
+	//Doesnt work :<	Lekcja retrievedLekcja = szkolaManager.findLekcjaById( ID_1);
+
+        Lekcja retrievedLekcja;
+        retrievedLekcja = retrievedLekcjas.get(retrievedLekcjas.size() -1);
 
 		assertEquals(RODZAJ_1, retrievedLekcja.getRodzaj());
-		//assertEquals(ID_1, retrievedLekcja.getIdLekcja());
-		// ... check other properties here
 	}
-*/
+
 	@Test
 	public void addUczenCheck() {
 
@@ -92,36 +90,63 @@ public class SzkolaManagerTest {
 		// ... check other properties here
 
 	}
-/*
+
 	@Test
-	public void sellUczenCheck() {
+	public void dropUczenFromLekcjaCheck() {
 
-		Lekcja lekcja = new Lekcja();
-		lekcja.setFirstName(NAME_2);
-		lekcja.setPin(PIN_2);
+		Uczen uczen1 = new Uczen();
+		Lekcja lekcja1 = new Lekcja();
 
-		szkolaManager.addClient(lekcja);
+		uczen1.setImie(IMIE_1); uczen1.setNazw(NAZWISKO_1); uczen1.setDosw(DOSW_1); uczen1.setLekcja(ID_1);uczen1.setZapisany(true);
 
-		Lekcja retrievedLekcja = szkolaManager.findClientByPin(PIN_2);
+		assertNotNull(szkolaManager.addUczen(uczen1));
 
-		Uczen uczen = new Uczen();
-		uczen.setMake(MAKE_2);
-		uczen.setModel(MODEL_2);
+		szkolaManager.addLekcja(lekcja1);
 
-		Long uczenId = szkolaManager.addNewUczen(uczen);
+		szkolaManager.disposeUczenFromLekcja(lekcja1,uczen1);
 
-		szkolaManager.sellUczen(retrievedLekcja.getId(), uczenId);
+		assertFalse(uczen1.getZapisany());
 
-		List<Uczen> ownedUczens = szkolaManager.getOwnedUczens(retrievedLekcja);
-
-		assertEquals(1, ownedUczens.size());
-		assertEquals(MAKE_2, ownedUczens.get(0).getMake());
-		assertEquals(MODEL_2, ownedUczens.get(0).getModel());
 	}
 
-	// @Test -
-	public void disposeUczenCheck() {
-		// Do it yourself
+	@Test
+	public void lekcjaDropCheck() {  // test usuniecia lekcji z przypisanym uczniem
+
+		Lekcja lekcja1 = new Lekcja();
+		Uczen uczen1 = new Uczen();
+
+		lekcja1.setGodz(GODZ_1); lekcja1.setIdLekcja(ID_1);lekcja1.setRodzaj(RODZAJ_1);
+
+		uczen1.setImie(IMIE_1); uczen1.setNazw(NAZWISKO_1); uczen1.setDosw(DOSW_1); uczen1.setLekcja(ID_1);uczen1.setZapisany(true);
+
+
+		szkolaManager.addUczen(uczen1);
+
+		szkolaManager.addLekcja(lekcja1);
+
+		szkolaManager.deleteLekcja(lekcja1);
+
+//		assertFalse(uczen1.getZapisany());
+
+		assertNull(szkolaManager.findLekcjaById(ID_1));
+
 	}
-*/
+
+	 @Test
+	public void editUczenCheck() {
+
+		 Uczen uczen1 = new Uczen();
+
+		 uczen1.setImie(IMIE_1); uczen1.setNazw(NAZWISKO_1); uczen1.setDosw(DOSW_1); uczen1.setLekcja(ID_1);uczen1.setZapisany(true);
+
+		 szkolaManager.addUczen(uczen1);
+
+		 assertEquals(uczen1.getImie(),IMIE_1);
+
+		 uczen1.setImie(IMIE_2);
+
+		 assertEquals(uczen1.getImie(),IMIE_2);
+	 }
+
+
 }
