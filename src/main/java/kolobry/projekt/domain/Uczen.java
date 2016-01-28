@@ -5,6 +5,7 @@ import javax.persistence.*;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "uczen.niezapis", query = "Select u from Uczen u where u.zapisany = false")
+		//@NamedQuery(name = "uczen.dropFromLekcja", query = "Update Uczen u set u.zapisany = false where u.idLekcja = :id ")
 })
 
 public class Uczen {

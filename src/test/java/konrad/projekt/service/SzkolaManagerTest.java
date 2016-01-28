@@ -7,6 +7,8 @@ import java.util.List;
 
 
 import kolobry.projekt.service.SzkolaManager;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +48,29 @@ public class SzkolaManagerTest {
 	private final String RODZAJ_2 = "snowboard";
 	private final String GODZ_2 = "3";
 
+	public Uczen uczen1 = new Uczen();
 
+
+	public Uczen uczen2 = new Uczen();
+
+	@Before
+	public void addUczenToDB(){
+		uczen1.setImie(IMIE_1);
+		uczen1.setNazw(NAZWISKO_1);
+		uczen1.setDosw(DOSW_1);
+
+		uczen2.setImie(IMIE_2);
+		uczen2.setNazw(NAZWISKO_2);
+		uczen2.setDosw(DOSW_2);
+
+		szkolaManager.addUczen(uczen1);
+		szkolaManager.addUczen(uczen2);
+	}
+	@After
+	public void dropUczenFromDB(){
+		szkolaManager.deleteUczen(uczen1);
+		szkolaManager.deleteUczen(uczen2);
+	}
 
 	@Test
 	public void addLekcjaCheck() {
@@ -69,15 +93,12 @@ public class SzkolaManagerTest {
 		uczen.setImie(IMIE_1);
 		uczen.setNazw(NAZWISKO_1);
 		uczen.setDosw(DOSW_1);
-		// ... other properties here
 
 		Long uczenId = szkolaManager.addUczen(uczen);
 
 		Uczen retrievedUczen = szkolaManager.findUczenById(uczenId);
 		assertEquals(IMIE_1, retrievedUczen.getImie());
 		assertEquals(NAZWISKO_1, retrievedUczen.getNazw());
-		// ... check other properties here
-
 	}
 
 	@Test
@@ -99,7 +120,7 @@ public class SzkolaManagerTest {
 	}
 
 	@Test
-	public void lekcjaDropCheck() {  // test usuniecia lekcji z przypisanym uczniem
+	public void dropLekcjaCheck() {  // test usuniecia lekcji z przypisanym uczniem
 
 		Lekcja lekcja1 = new Lekcja();
 		Uczen uczen1 = new Uczen();
@@ -186,8 +207,6 @@ public class SzkolaManagerTest {
 		szkolaManager.addUczen(uczen2);
 
 		uczniowie = szkolaManager.getAllUczen();
-
-		//assertEquals(2,uczniowie.size());
 
 		for(Uczen uczen : uczniowie){
 			assertEquals(false,uczen.getZapisany());

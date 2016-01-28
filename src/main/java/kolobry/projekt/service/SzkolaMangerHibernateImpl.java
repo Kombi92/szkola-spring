@@ -51,7 +51,7 @@ public class SzkolaMangerHibernateImpl implements SzkolaManager {
 
 		sessionFactory.getCurrentSession().delete(uczen);
 	}
-
+	/*
 	@Override
 	public List<Uczen> getOwnedLekcja (Lekcja lekcja) {
 		lekcja = (Lekcja) sessionFactory.getCurrentSession().get(Lekcja.class,
@@ -60,7 +60,7 @@ public class SzkolaMangerHibernateImpl implements SzkolaManager {
 		List<Uczen> uczniowie = new ArrayList<Uczen>(lekcja.getUczniowie());
 		return uczniowie;
 	}
-
+	*/
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Lekcja> getAllLekcja() {
