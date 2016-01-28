@@ -2,6 +2,7 @@ package konrad.projekt.service;
 
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -147,6 +148,67 @@ public class SzkolaManagerTest {
 
 		 assertEquals(uczen1.getImie(),IMIE_2);
 	 }
+
+	@Test
+	public void giveUczenLekcjaCheck() {
+
+		Lekcja lekcja1 = new Lekcja();
+		Uczen uczen1 = new Uczen();
+
+		lekcja1.setGodz(GODZ_1); lekcja1.setIdLekcja(ID_1);lekcja1.setRodzaj(RODZAJ_1);
+
+		uczen1.setImie(IMIE_1); uczen1.setNazw(NAZWISKO_1); uczen1.setDosw(DOSW_1);uczen1.setZapisany(false);
+
+		szkolaManager.addUczen(uczen1);
+		szkolaManager.addLekcja(lekcja1);
+
+		szkolaManager.giveUczenLekcja(lekcja1.getIdLekcja(),uczen1.getIdUczen());
+
+		assertTrue(uczen1.getZapisany());
+
+	}
+
+	@Test
+	public void getUczenWithoutLekcja(){
+
+		Uczen uczen1 = new Uczen();
+		Uczen uczen2 = new Uczen();
+		List<Uczen> uczniowie = new ArrayList<Uczen>();
+
+		uczen1.setImie(IMIE_1); uczen1.setNazw(NAZWISKO_1); uczen1.setDosw(DOSW_1);uczen1.setZapisany(false);
+		uczen2.setImie(IMIE_1); uczen2.setNazw(NAZWISKO_1); uczen2.setDosw(DOSW_1);uczen2.setZapisany(false);
+
+		szkolaManager.addUczen(uczen1);
+		szkolaManager.addUczen(uczen2);
+
+		uczniowie = szkolaManager.getAllUczen();
+
+		assertEquals(2,uczniowie.size());
+	}
+
+	@Test
+	public void getUczenFromLekcja(){
+
+		Lekcja lekcja1 = new Lekcja();
+		Uczen uczen1 = new Uczen();
+		Uczen uczen2 = new Uczen();
+		List<Uczen> uczniowie = new ArrayList<Uczen>();
+
+		lekcja1.setGodz(GODZ_1); lekcja1.setIdLekcja(ID_1);lekcja1.setRodzaj(RODZAJ_1);
+
+		uczen1.setImie(IMIE_1); uczen1.setNazw(NAZWISKO_1); uczen1.setDosw(DOSW_1);uczen1.setZapisany(false);
+		uczen2.setImie(IMIE_1); uczen2.setNazw(NAZWISKO_1); uczen2.setDosw(DOSW_1);uczen2.setZapisany(false);
+
+		szkolaManager.addUczen(uczen1);
+		szkolaManager.addUczen(uczen2);
+		szkolaManager.addLekcja(lekcja1);
+		szkolaManager.giveUczenLekcja(lekcja1.getIdLekcja(),uczen1.getIdUczen());
+		szkolaManager.giveUczenLekcja(lekcja1.getIdLekcja(),uczen2.getIdUczen());
+
+		uczniowie = lekcja1.getUczniowie();
+
+		assertEquals(2,uczniowie.size());
+	}
 
 
 }

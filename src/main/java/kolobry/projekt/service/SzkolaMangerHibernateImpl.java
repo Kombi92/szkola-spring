@@ -35,7 +35,7 @@ public class SzkolaMangerHibernateImpl implements SzkolaManager {
 	public void deleteLekcja(Lekcja lekcja) {
 		lekcja = (Lekcja) sessionFactory.getCurrentSession().get(Lekcja.class,
 				lekcja.getIdLekcja());
-		
+
 		// lazy loading here
 		for (Uczen aUczen : lekcja.getUczniowie()) {
 			aUczen.setZapisany(false);
@@ -86,7 +86,7 @@ public class SzkolaMangerHibernateImpl implements SzkolaManager {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Uczen> getAllUczen() {
-		return sessionFactory.getCurrentSession().getNamedQuery("uczen.niezpis")
+		return sessionFactory.getCurrentSession().getNamedQuery("uczen.niezapis")
 				.list();
 	}
 	@Override
